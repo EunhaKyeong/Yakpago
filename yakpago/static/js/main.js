@@ -230,15 +230,16 @@ function result_medicine(click) {
                 }
                 //effect
                 let effect = data[i].effect;
+                console.log(effect)
                 if (effect == null) {
                     document.getElementsByClassName('list-group-item effect')[i%3].innerHTML = "";
                     document.getElementsByClassName('list-group-item effect')[i%3].style.height = "42px";
                 }
                 else if (effect.length <= 25) {
-                    document.getElementsByClassName('list-group-item effect')[i%3].innerHTML += effect;
+                    document.getElementsByClassName('list-group-item effect')[i%3].innerHTML = effect;
                 }
                 else {
-                    document.getElementsByClassName('list-group-item effect')[i%3].innerHTML += effect.substr(0, 22) + "...<span class='more'> ▼</span>";
+                    document.getElementsByClassName('list-group-item effect')[i%3].innerHTML = effect.substr(0, 22) + "...<span class='more'> ▼</span>";
                     document.getElementsByClassName('list-group-item effect')[i%3].innerHTML += "<div class='bubble'>" + effect + "</div>";
                     document.getElementsByClassName('list-group-item effect')[i%3].getElementsByClassName('more')[0].onclick = function() {
                         if (document.getElementsByClassName('list-group-item effect')[i%3].getElementsByClassName('more')[0].textContent==' ▼') {
