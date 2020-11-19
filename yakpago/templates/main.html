@@ -6,9 +6,13 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="shortcut icon" href="../static/images/favicon.png">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
 
     <title>약파고: 내 손안의 작은 약국</title>
-
+    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=c5x9tl4zl8"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
     <!-- Custom styles for this template -->
     <link href="../static/style.css" rel="stylesheet">
     <link href="../static/main.css" rel="stylesheet">
@@ -24,6 +28,7 @@
     <![endif]-->
 
     <!--font added-->
+    
     <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
     <style type="text/css">
     h1{font-family: 'Righteous', cursive;}
@@ -31,6 +36,14 @@
 </head>
 
 <body data-spy="scroll" data-target="#topnav">
+
+{% for i in data %}
+<div class = "name" style = "display : none">{{ i[0] }}</div>
+<div class = "address" style = "display : none">{{ i[1] }}</div>
+<div class = "number" style = "display : none">{{ i[2] }}</div>
+<div class = "lat" style = "display : none">{{ i[4] }}</div> 
+<div class = "log" style = "display : none">{{ i[3] }}</div>
+{% endfor %}
 
 <div class="navbar navbar-inverse navbar-fixed-top" id="topnav">
     <div class="container">
@@ -314,6 +327,150 @@
             <h1 class="page-headline large text-center">MAP</h1>
 
             <p class="text-center">가까운 약국을 지도에서 찾으세요</p>
+            <div id="map" style="width:100%;height:550px; color:black"></div>
+
+            <script type=text/javascript>
+
+                var elements = document.getElementsByClassName("lat");
+                var elements2 = document.getElementsByClassName("log");
+                var elements3 = document.getElementsByClassName("name");
+                var elements4 = document.getElementsByClassName("address");
+                var elements5 = document.getElementsByClassName("number");
+                var lelements = [];
+                var lelements2 = [];
+                var nelements = [];
+                var aelements = [];
+                var relements = [];
+                //var marker = [];
+                //var iwContent = [];
+                //var infowindow = [];
+                
+                for(var i=0; i<elements.length; i++) {
+                        nelements.push(elements3[i].innerHTML);
+                        lelements.push(elements[i].innerHTML);
+                        lelements2.push(elements2[i].innerHTML);
+                        aelements.push(elements4[i].innerHTML);
+                        relements.push(elements5[i].innerHTML);
+                    }
+                
+                //내 위치 마커는 항상 오픈
+                function success(position) {
+                
+                    const latitude  = position.coords.latitude;
+                    //position.coords.latitude;
+                    const longitude = position.coords.longitude;
+                    //position.coords.longitude;
+                
+                    var map = new naver.maps.Map('map', {
+                        center: new naver.maps.LatLng(latitude, longitude),
+                        zoom: 17
+                    });
+                
+                    var marker = new naver.maps.Marker({
+                        position: new naver.maps.LatLng(latitude, longitude),
+                        map: map
+                    });
+                
+                    var bounds = map.getBounds(),
+                        southWest = bounds.getSW(),
+                        northEast = bounds.getNE(),
+                        lngSpan = northEast.lng() - southWest.lng(),
+                        latSpan = northEast.lat() - southWest.lat();
+                
+                    var markers = [],
+                        infoWindows = [];
+                
+                    for (var i=0; i<lelements.length; i++) {
+                
+                        var disX = Math.round((latitude - lelements[i]) * 1e10) / 1e10;
+                        var disY = Math.round((longitude - lelements2[i]) * 1e10) / 1e10;
+                        var distance = Math.round(Math.sqrt(Math.abs(disX*disX) + Math.abs(disY*disY))*1e10) / 1e10;
+                
+                        if(distance <= 0.01) {
+                
+                            var position = new naver.maps.LatLng(
+                                lelements[i],
+                                lelements2[i]);
+                
+                            var marker = new naver.maps.Marker({
+                                map: map,
+                                position: position,
+                                zIndex: 100
+                            });
+                
+                            var infoWindow = new naver.maps.InfoWindow({
+                                content: '<div style="width:300px;text-align:center;padding:10px;">' + nelements[i] + '<br>' + aelements[i]+ '<br>' + relements[i] +'</b>.</div>'
+                            });
+                
+                            markers.push(marker);
+                            infoWindows.push(infoWindow);
+                        }
+                    }
+                
+                    naver.maps.Event.addListener(map, 'idle', function() {
+                        updateMarkers(map, markers);
+                    });
+                
+                    function updateMarkers(map, markers) {
+                
+                        var mapBounds = map.getBounds();
+                        var marker, position;
+                
+                        for (var i = 0; i < markers.length; i++) {
+                
+                            marker = markers[i]
+                            position = marker.getPosition();
+                
+                            if (mapBounds.hasLatLng(position)) {
+                                showMarker(map, marker);
+                            } else {
+                                hideMarker(map, marker);
+                            }
+                        }
+                    }
+                
+                    function showMarker(map, marker) {
+                
+                        if (marker.setMap()) return;
+                        marker.setMap(map);
+                    }
+                
+                    function hideMarker(map, marker) {
+                
+                        if (!marker.setMap()) return;
+                        marker.setMap(null);
+                    }
+                
+                    // 해당 마커의 인덱스를 seq라는 클로저 변수로 저장하는 이벤트 핸들러를 반환합니다.
+                    function getClickHandler(seq) {
+                        return function(e) {
+                            var marker = markers[seq],
+                                infoWindow = infoWindows[seq];
+                
+                            if (infoWindow.getMap()) {
+                                infoWindow.close();
+                            } else {
+                                infoWindow.open(map, marker);
+                            }
+                        }
+                    }
+                
+                    for (var i=0, ii=markers.length; i<ii; i++) {
+                        naver.maps.Event.addListener(markers[i], 'click', getClickHandler(i));
+                    }
+                }
+                
+                function error() {
+                    status.textContent = 'Unable to retrieve your location';
+                }
+                
+                if(!navigator.geolocation) {
+                    //geolocation을 지원하지 않음(위치정보없음 = 맨처음상태)
+                  } else {
+                    //지원함(위치정보있음)
+                    navigator.geolocation.getCurrentPosition(success, error);
+                  }
+                </script>
         </div>
         <div class="row inner-page">
             <div class="col-md-8 col-md-push-4 lazy-container loaded">

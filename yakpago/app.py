@@ -4,6 +4,7 @@ from flask_wtf import FlaskForm
 from db_model import postgresql
 from model import model
 import json
+import psycopg2
 
 app = Flask(__name__)
 Bootstrap(app)
@@ -12,15 +13,21 @@ Bootstrap(app)
 def after_input():
     categories = postgresql.select_category()
 
+    conn = psycopg2.connect(host='yakpago-db-instance.ce3s5gihh4zd.ap-northeast-2.rds.amazonaws.com', dbname='pharmacy', user='yakpago', password='yakpago723', port='5432') # db에 접속
+
+    cur = conn.cursor()
+    cur.execute("select pharmacy_name, pharmacy_address, pharmacy_tel ,longitude, latitude from pharmacy;")
+    ex = cur.fetchmany(22914)
+    
     if request.method=='GET':
-        return render_template('main.html', categories=categories)
+        return render_template('main.html', data=ex, categories=categories)
     elif request.method=='POST':
         input_form = request.form
         result = postgresql.select_item_names(model.printInputValue(input_form))
         # 머신러닝 모델 실행 후 추천 약품의 item_seq(약품 코드)와 item_name(약품명)을 딕셔너리 형태로 임시로 저장해 놓는 파일 생성.
         with open('static\\results.txt', 'w+t', encoding='utf-8') as f:
             json.dump(result, f, indent="\t", ensure_ascii = False)
-        return render_template('main.html', categories=categories, scroll='Result')
+        return render_template('main.html', data=ex, categories=categories, scroll='Result')
 
 #입력값 Dynamic Select Box 구현을 위해 필요한 라우팅 경로.
 @app.route('/subcategory/<category>')
