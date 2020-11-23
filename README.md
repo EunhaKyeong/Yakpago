@@ -3,35 +3,32 @@
 2. 정보소외계층을 위한 머신러닝 기반 맞춤형 일반의약품 추천 서비스    
 
 ## 주요 기능  
--------------------------------------------------------
 1. Java Spring을 활용한 약품 상세정보, 약국 상세정보 openAPI 데이터 적재.  
 2. 머신러닝 기반 맞춤형 의약품 추천 서비스.  
 3. Python Flask를 활용하여 웹서비스 제작.  
 
-## :mag_right: 페이지 소개
---------------------------------------------------------
-__:one:. 메인페이지__  
+## :mag_right: 페이지 소개  
+__:paperclip: 메인페이지__  
 <img src="https://user-images.githubusercontent.com/66666533/99935381-ec299780-2da3-11eb-949e-0564ced4d52b.png" width="1000" height="250">  
 <img src="https://user-images.githubusercontent.com/66666533/99935443-0bc0c000-2da4-11eb-8392-ea3eef2579da.png" width="1000" height="250">
 메인페이지. yakpago 서비스에 대한 설명, 진단하기를 클릭하면 사용자가 건강 상태를 입력할 수 있는 페이지로 이동.  
 <br>
-__:two:. 사용자 입력 페이지__  
+__:paperclip: 사용자 입력 페이지__  
 <img src="https://user-images.githubusercontent.com/66666533/99935616-64905880-2da4-11eb-9bdb-62a81d3dc302.png" width="1000" height="250">
 사용자가 원하는 약품 카테고리와 나이, 기저질환, 복용약품, 임신여부를 입력하는 페이지.  
 <br>
-__:three:. 결과페이지 출력 이전 페이지__  
+__:paperclip: 결과페이지 출력 이전 페이지__  
 <img src="https://user-images.githubusercontent.com/66666533/99935779-d668a200-2da4-11eb-83ff-486ced46e18f.png" width="1000" height="250">
 결과페이지를 출력하는 위치에서 입력데이터가 들어오지 않았을 때 초기 화면.  
 <br>
-__:four:. 결과페이지__  
+__:paperclip: 결과페이지__  
 <img src="https://user-images.githubusercontent.com/66666533/99935876-0fa11200-2da5-11eb-9cda-47e1100db359.png" width="1000" height="250">  
 사용자의 입력값을 기반으로 머신러닝 모델이 추천하는 약품을 출력하는 결과 페이지. 약품 이름, 약품 이미지, 성상(약품 모양), 효과, 제조회사, 보관방법, 유효기간를 보여줌. 화살표를 클릭하면 더 많은 추천 약품을 확인할 수 있음.  
 <br>
-__:five:. 지도페이지__  
+__:paperclip: 지도페이지__  
 <img src="https://user-images.githubusercontent.com/66666533/99936013-6d355e80-2da5-11eb-9a1b-67c1846a7c95.png" width="1000" height="250">  
 현재 위치를 기반으로 주변의 약국을 보여주는 map 페이지. 마커를 클릭하면 약국이름, 약국 주소, 전화번호 등 상세 정보를 추가로 확인할 수 있음.  
 ## :computer:Technology  
----------------------------------------------------------------
 :arrow_forward: Java Spring  
 :arrow_forward: JavaScript  
 :arrow_forward: Python  
@@ -40,18 +37,17 @@ __:five:. 지도페이지__
 :arrow_forward: AWS RDS  
 :arrow_forward: BootStrap4  
 ## :two_men_holding_hands::two_women_holding_hands: Team
---------------------------------------------------------------  
 [경은하](https://github.com/EunhaKyeong)  
 [서호진](https://github.com/seohojin99)  
 [나동민](https://github.com/skehdxhd96)  
 [박민지]  
 [최보리]  
 ## URL  
---------------------------------------------------------------
 시연 영상 Youtube  
 <https://www.youtube.com/watch?v=y0Rc-eujaNY&feature=youtu.be>  
 <br><br>
 
+-----------------------------------------------------------------------------------------------------------------
 # GitHub 협업 Flow  
 __1. Fork & Clone__   
 * Fork : 다른 사용자의 원격 저장소에 있는 프로젝트를 내 계정의 원격 저장소로 그대로 가져오는 작업.
